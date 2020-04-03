@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using NServiceBus;
 
 namespace WebApi2
 {
@@ -18,6 +13,14 @@ namespace WebApi2
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseNServiceBus(hostBuilderContext =>
+                {
+                    var endpointConfiguration = new EndpointConfiguration("WebApi.Sender");
+
+                    endpointConfiguration.UseTransport<LearningTransport>();
+
+                    return endpointConfiguration;
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
