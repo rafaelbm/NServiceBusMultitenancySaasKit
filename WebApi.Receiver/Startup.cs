@@ -25,7 +25,7 @@ namespace WebApi.Receiver
         {
             services.AddControllers();
 
-            services.AddMultitenancy<AppTenant, AppTenantResolver>();
+            services.MyAddMultitenancy<AppTenant, AppTenantResolver>();
 
             services.Configure<MultitenancyOptions>(Configuration.GetSection("Multitenancy"));
         }
@@ -53,7 +53,7 @@ namespace WebApi.Receiver
 
     public static class MultitenancyServiceCollectionExtensions
     {
-        public static IServiceCollection AddMultitenancy<TTenant, TResolver>(this IServiceCollection services)
+        public static IServiceCollection MyAddMultitenancy<TTenant, TResolver>(this IServiceCollection services)
             where TResolver : class, ITenantResolver<TTenant>
             where TTenant : class, new()
         {
@@ -66,7 +66,7 @@ namespace WebApi.Receiver
 
             // Make Tenant and TenantContext injectable
             services.AddScoped(prov => prov.GetService<IHttpContextAccessor>()?.HttpContext?.GetTenantContext<TTenant>());
-            services.AddScoped(prov => prov.GetService<TenantContext<TTenant>>()?.Tenant);
+            services.AddScoped(prov => prov.GetService<TenantContext<TTenant>>()?.Tenant ?? Activator.CreateInstance<TTenant>());
 
             // Make ITenant injectable for handling null injection, similar to IOptions
             services.AddScoped<ITenant<TTenant>>(prov => new TenantWrapper<TTenant>(prov.GetService<TTenant>()));
