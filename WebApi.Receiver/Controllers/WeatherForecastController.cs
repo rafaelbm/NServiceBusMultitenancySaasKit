@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WebApi.Receiver;
 
 namespace WebApi1.Controllers
 {
@@ -17,15 +18,19 @@ namespace WebApi1.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly AppTenant _appTenant;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, AppTenant appTenant)
         {
             _logger = logger;
+            _appTenant = appTenant;
         }
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            Console.WriteLine(_appTenant);
+
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

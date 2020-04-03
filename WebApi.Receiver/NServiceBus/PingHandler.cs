@@ -22,7 +22,7 @@ namespace WebApi.Receiver.NServiceBus
 
             await context.Reply(new Pong { From = "WebApi.Receiver" });
 
-            Console.WriteLine("Respondido com pong...");
+            Console.WriteLine("Respondido com pong.");
         }
     }
 }
