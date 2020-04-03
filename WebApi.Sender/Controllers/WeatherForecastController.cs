@@ -46,7 +46,7 @@ namespace WebApi2.Controllers
             _logger.LogInformation("Sending message...");
 
             var sendOptions = new SendOptions();
-            sendOptions.SetHeader("Tenant", "localhost:60000");
+            sendOptions.SetHeader("Tenant", HttpContext.Request.Host.ToString());
             sendOptions.SetDestination("WebApi.Receiver");
 
             await _messageSession.Send(new Ping { From = "WebApi.Sender" }, sendOptions);
