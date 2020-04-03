@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi.Receiver", "WebApi.R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi.Sender", "WebApi.Sender\WebApi.Sender.csproj", "{6FCE0507-248A-4301-B58E-70F120550BAE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages", "Messages\Messages.csproj", "{C15F7DAD-B435-4046-BB39-6B4FE932B37F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6FCE0507-248A-4301-B58E-70F120550BAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FCE0507-248A-4301-B58E-70F120550BAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FCE0507-248A-4301-B58E-70F120550BAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C15F7DAD-B435-4046-BB39-6B4FE932B37F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C15F7DAD-B435-4046-BB39-6B4FE932B37F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C15F7DAD-B435-4046-BB39-6B4FE932B37F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C15F7DAD-B435-4046-BB39-6B4FE932B37F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
