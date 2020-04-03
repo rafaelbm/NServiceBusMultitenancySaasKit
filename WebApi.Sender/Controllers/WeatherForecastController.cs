@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Messages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NServiceBus;
 
 namespace WebApi2.Controllers
 {
@@ -17,10 +19,12 @@ namespace WebApi2.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IMessageSession _messageSession;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IMessageSession messageSession)
         {
             _logger = logger;
+            _messageSession = messageSession;
         }
 
         [HttpGet]
@@ -34,6 +38,20 @@ namespace WebApi2.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpPost]
+        public async Task Post()
+        {
+            _logger.LogInformation("Sending message...");
+
+            var sendOptions = new SendOptions();
+            sendOptions.SetHeader("Tenant", "localhost:60000");
+            sendOptions.SetDestination("WebApi.Receiver");
+
+            await _messageSession.Send(new Ping { From = "WebApi.Sender" }, sendOptions);
+
+            _logger.LogInformation("Messag sent.");
         }
     }
 }

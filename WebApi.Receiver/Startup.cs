@@ -1,16 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
-namespace WebApi1
+namespace WebApi.Receiver
 {
     public class Startup
     {
@@ -25,6 +19,10 @@ namespace WebApi1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddMultitenancy<AppTenant, AppTenantResolver>();
+
+            services.Configure<MultitenancyOptions>(Configuration.GetSection("Multitenancy"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,6 +34,8 @@ namespace WebApi1
             }
 
             app.UseRouting();
+
+            app.UseMultitenancy<AppTenant>();
 
             app.UseAuthorization();
 
