@@ -66,9 +66,23 @@ namespace WebApi.Receiver
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Make Tenant and TenantContext injectable
-            services.AddScoped(prov => prov.GetService<IHttpContextAccessor>()?.HttpContext?.GetTenantContext<TTenant>());
-            //services.AddScoped(prov => prov.GetService<TenantContext<TTenant>>()?.Tenant);
-            services.AddScoped(prov => prov.GetService<TenantContext<TTenant>>()?.Tenant ?? Activator.CreateInstance<TTenant>());
+            services.AddScoped(prov =>
+            {
+                var tenantContext = prov.GetService<IHttpContextAccessor>()?.HttpContext?.GetTenantContext<TTenant>();
+
+                if (tenantContext != null)
+                    return tenantContext;
+
+                var tenant = Activator.CreateInstance<TTenant>();
+                
+                // Uso essa forma diferente de criar instâncias através de reflection para poder passar o Tenant criado
+                // para o construtor de TenantContext<TTenant>
+                tenantContext = (TenantContext<TTenant>)Activator.CreateInstance(typeof(TenantContext<TTenant>), tenant);
+
+                return tenantContext;
+            });
+
+            services.AddScoped(prov => prov.GetService<TenantContext<TTenant>>()?.Tenant);
 
             // Make ITenant injectable for handling null injection, similar to IOptions
             services.AddScoped<ITenant<TTenant>>(prov => new TenantWrapper<TTenant>(prov.GetService<TTenant>()));
@@ -83,5 +97,4 @@ namespace WebApi.Receiver
             return services;
         }
     }
-
 }

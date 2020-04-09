@@ -1,3 +1,4 @@
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
@@ -13,6 +14,7 @@ namespace WebApi2
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .UseNServiceBus(hostBuilderContext =>
                 {
                     var endpointConfiguration = new EndpointConfiguration("WebApi.Sender");
